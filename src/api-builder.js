@@ -20,6 +20,7 @@ module.exports = function ApiBuilder(options) {
 		logger = (options && options.logger) || console.log,
 		methodConfigurations = {},
 		routes = {},
+		models = [],
 		customCorsHandler,
 		postDeploySteps = {},
 		customCorsHeaders,
@@ -239,8 +240,14 @@ module.exports = function ApiBuilder(options) {
 		};
 
 	['ANY'].concat(supportedMethods).forEach(setUpHandler);
+	self.getModels = function() {
+		return models;
+	};
+	self.addModel = function (model) {
+		models.push(model);
+	};
 	self.apiConfig = function () {
-		var result = {version: 3, routes: methodConfigurations};
+		var result = {version: 3, routes: methodConfigurations, models: models};
 		if (customCorsHandler !== undefined) {
 			result.corsHandlers = !!customCorsHandler;
 		}
